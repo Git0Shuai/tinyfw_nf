@@ -31,3 +31,8 @@
 # Debug files
 *.dSYM/
 *.su
+
+# generated file when compile a linux module
+*.order
+*.symvers
+*.mod.c
