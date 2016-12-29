@@ -14,7 +14,7 @@
 #include <linux/cdev.h>           /// struct cdev  
 #include <linux/slab.h>
 
-#include "common.h"
+#include "../common.h"
 #include "module_interface.h"
 #include "rule_list_manage.h"
 #include "filter_action.h"
@@ -117,9 +117,76 @@ ssize_t ModuleWrite(struct file *filp, const char *buf,
 }
 
 long ModuleIoctl(struct file *file, unsigned int cmd, unsigned long arg) {
-    //TODO:
-    // operation except set or read rule list
+    long kernel_arg;
+    struct RuleNode *new_node;
+    struct RuleNode *pre;
 
+    switch(cmd) {
+        case IO_CTRL_CLE:
+            kernel_arg = g_rule_list.default_rule;
+            RuleListCleanup();
+            g_rule_list.default_rule = kernel_arg;
+            break;
+        case IO_CTRL_START:
+            StartFilter();
+            break;
+        case IO_CTRL_SHUT:
+            ShutdownFilter();
+            break;
+        case IO_CTRL_DEF:
+            if(arg == IO_CTRL_PERMIT) {
+                g_rule_list.default_rule = RULE_PERMIT;
+            }
+            else { //arg == IO_CTRL_REJECT
+                g_rule_list.default_rule = RULE_REJECT;
+            }
+            break;
+        case IO_CTRL_GET_DEF:
+            if(g_rule_list.default_rule == RULE_PERMIT) {
+                kernel_arg = IO_CTRL_PERMIT;
+            }
+            else { //default_rule == RULE_REJECT
+                kernel_arg = IO_CTRL_REJECT;
+            }
+            if(copy_to_user((void *)arg, &kernel_arg, sizeof(long)) != 0) {
+                printk("copy_to_user FAILED!\n");
+                return -1;
+            }
+            break;
+        case IO_CTRL_ADD:
+            if(copy_from_user(g_io_buff, (void *)arg, 128)) {
+                printk("copy_from_user FAILED!\n");
+                return -1;
+            }
+            new_node = ParseRule(g_io_buff);
+            if(new_node == NULL) {
+                printk("ParseRule FAILED\n");
+                return -1;
+            }
+            RuleInsert(new_node);
+            break;
+        case IO_CTRL_DEL:
+            if(arg == 1 && g_rule_list.head != NULL) {
+                pre = g_rule_list.head;
+                g_rule_list.head = g_rule_list.head->next;
+                kfree(pre);
+                return 0;
+            }
+            for(kernel_arg = 2, pre = g_rule_list.head, new_node = pre->next;
+                    (unsigned long)kernel_arg < arg && new_node != NULL;
+                    ++kernel_arg, pre = new_node, new_node = new_node->next){
+                ; //empyt
+            } 
+            if(new_node != NULL) {
+                pre->next = new_node->next;
+                kfree(new_node);
+                return 0;
+            }
+            return -1; //only if we DON'T find the rule, we get here. SO WE FAILED!
+        default:
+            printk("Unknown CMD!\n");
+            return -1;
+    }
     return 0;
 }
 

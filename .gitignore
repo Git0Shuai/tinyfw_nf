@@ -36,3 +36,4 @@
 *.order
 *.symvers
 *.mod.c
+.*

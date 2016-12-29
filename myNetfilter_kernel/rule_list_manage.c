@@ -4,7 +4,7 @@
 
 #include <linux/slab.h>
 
-#include "common.h"
+#include "../common.h"
 #include "rule_list_manage.h"
 
 struct RuleList g_rule_list; 
@@ -21,8 +21,8 @@ void RuleListCleanup(void) {
     for(temp = g_rule_list.head; temp != NULL; temp = g_rule_list.head) {
         g_rule_list.head = temp->next;
         kfree(temp);
-        RuleListInit();
     } 
+    RuleListInit();
 }
 
 void RuleInsert(struct RuleNode *rnode) {
