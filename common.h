@@ -5,7 +5,7 @@
 
 //ioctrl CMD
 #define IO_CTRL_START 1
-#define IO_CTRL_SHUT 2
+#define IO_CTRL_SHUTDOWN 9 //2 do not work！ why？ I DON'T know~ 
 #define IO_CTRL_DEF 3
 #define IO_CTRL_ADD 4
 #define IO_CTRL_DEL 5

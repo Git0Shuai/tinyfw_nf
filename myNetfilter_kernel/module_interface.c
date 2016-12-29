@@ -50,10 +50,7 @@ int ModuleOpen(struct inode *inode, struct file *file) {
     if(g_device_status) {
         return -EBUSY;
     }
-    else {
-        g_device_status = 1;
-        return 0;
-    }
+    g_device_status = 1;
 
     printk("device open SUCCEED!\n");
     return 0;
@@ -120,7 +117,7 @@ long ModuleIoctl(struct file *file, unsigned int cmd, unsigned long arg) {
     long kernel_arg;
     struct RuleNode *new_node;
     struct RuleNode *pre;
-
+    
     switch(cmd) {
         case IO_CTRL_CLE:
             kernel_arg = g_rule_list.default_rule;
@@ -130,7 +127,7 @@ long ModuleIoctl(struct file *file, unsigned int cmd, unsigned long arg) {
         case IO_CTRL_START:
             StartFilter();
             break;
-        case IO_CTRL_SHUT:
+        case IO_CTRL_SHUTDOWN:
             ShutdownFilter();
             break;
         case IO_CTRL_DEF:
@@ -187,6 +184,7 @@ long ModuleIoctl(struct file *file, unsigned int cmd, unsigned long arg) {
             printk("Unknown CMD!\n");
             return -1;
     }
+
     return 0;
 }
 

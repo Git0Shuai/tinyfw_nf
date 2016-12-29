@@ -187,7 +187,7 @@ int main(int argc, char *argv[]) {
         }
     }
     else if(strcmp(argv[1], "shutdown") == 0) {
-        if(ioctl(fd, IO_CTRL_SHUT) == -1) {
+        if(ioctl(fd, IO_CTRL_SHUTDOWN) == -1) {
             printf("shutdown FAILED!\n");
             return -1;
         }
