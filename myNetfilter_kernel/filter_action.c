@@ -17,11 +17,14 @@ extern struct RuleList g_rule_list;
 static struct nf_hook_ops nf_reg;
 static int active = 0;
 
-unsigned int NFHookFunc(unsigned int hooknum,
+//unsigned int NFHookFunc(unsigned int hooknum,
+//                    struct sk_buff *skb,
+//                    const struct net_device *in,
+//                    const struct net_device *out,
+//                    int (*okfn)(struct sk_buff *)) {
+unsigned int NFHookFunc(const struct nf_hook_ops *ops_unused,
                     struct sk_buff *skb,
-                    const struct net_device *in,
-                    const struct net_device *out,
-                    int (*okfn)(struct sk_buff *)) {
+                    const struct nf_hook_state *state) {
     struct iphdr *iph;
     struct tcphdr *tcph;
     struct udphdr *udph;
@@ -90,7 +93,7 @@ unsigned int NFHookFunc(unsigned int hooknum,
         if(RuleMatch(rule_partten, &package_node)) {//one match RETURN;
             if(rule_partten->rule == RULE_PERMIT) {
                 printk("match rule accept\n");
-                printk("%s: %u.%u.%u.%u:%u  %u.%u.%u.%u:%u", in->name,
+                printk("%s: %u.%u.%u.%u:%u  %u.%u.%u.%u:%u", state->in->name,
                        package_node.srcip >> 24,  (package_node.srcip >> 16) & 0xff, 
                        (package_node.srcip >> 8) & 0xff, package_node.srcip & 0xff,
                        package_node.srcport,
@@ -102,7 +105,7 @@ unsigned int NFHookFunc(unsigned int hooknum,
             }
             else {
                 printk("match rule reject\n");
-                printk("%s: %u.%u.%u.%u:%u  %u.%u.%u.%u:%u", in->name,
+                printk("%s: %u.%u.%u.%u:%u  %u.%u.%u.%u:%u", state->in->name,
                        package_node.srcip >> 24,  (package_node.srcip >> 16) & 0xff, 
                        (package_node.srcip >> 8) & 0xff, package_node.srcip & 0xff,
                        package_node.srcport,

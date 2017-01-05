@@ -16,7 +16,7 @@
 #define IO_CTRL_PERMIT 11
 #define IO_CTRL_REJECT 12
 
-inline void Debug(const char *DbgStr);
+//inline void Debug(const char *DbgStr);
 
 #endif
 

@@ -1,4 +1,4 @@
-KER_SRC_ROOT	=	../../kernel_src/linux-3.10.104
+KER_SRC_ROOT	=		/usr/src/linux-source-4.2
 
 myntfw-objs := module_interface.o rule_list_manage.o filter_action.o
 obj-m += myntfw.o

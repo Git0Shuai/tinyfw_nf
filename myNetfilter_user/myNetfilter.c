@@ -18,7 +18,7 @@ void PrintHelpMsg() {
     printf("client of tinyfw_nf. version 1.0.\n");
     printf("\n");
     printf("Usage:\n");
-    printf("  tinyfw_nf [cmd] [args...]\n");
+    printf("  tinyfw_nf [cmd [args...]]\n");
     printf("\n");
     printf("Cmd:\n");
     printf("  help          show this help page.\n");
