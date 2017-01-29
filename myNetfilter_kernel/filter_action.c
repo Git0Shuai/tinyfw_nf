@@ -93,7 +93,7 @@ unsigned int NFHookFunc(const struct nf_hook_ops *ops_unused,
         if(RuleMatch(rule_partten, &package_node)) {//one match RETURN;
             if(rule_partten->rule == RULE_PERMIT) {
                 printk("match rule accept\n");
-                printk("%s: %u.%u.%u.%u:%u  %u.%u.%u.%u:%u", state->in->name,
+                printk("%s: %u.%u.%u.%u:%u  %u.%u.%u.%u:%u\n", state->in->name,
                        package_node.srcip >> 24,  (package_node.srcip >> 16) & 0xff, 
                        (package_node.srcip >> 8) & 0xff, package_node.srcip & 0xff,
                        package_node.srcport,
@@ -105,7 +105,7 @@ unsigned int NFHookFunc(const struct nf_hook_ops *ops_unused,
             }
             else {
                 printk("match rule reject\n");
-                printk("%s: %u.%u.%u.%u:%u  %u.%u.%u.%u:%u", state->in->name,
+                printk("%s: %u.%u.%u.%u:%u  %u.%u.%u.%u:%u\n", state->in->name,
                        package_node.srcip >> 24,  (package_node.srcip >> 16) & 0xff, 
                        (package_node.srcip >> 8) & 0xff, package_node.srcip & 0xff,
                        package_node.srcport,

@@ -240,7 +240,8 @@ int ModuleInit(void) {
  * ModuleExit函数，模块卸载时调用
  * 1. 取消挂在在hook函数；
  * 2. 释放规则表所占用的内存；
- * 3. 删除用于与用户态进程通信的设备节点。
+ * 3. 删除用于与用户态进程通信的设备节点；
+ * 4. 清理I/O缓冲区。
  */
 void ModuleExit(void) {
     //setp1: remove hook
@@ -253,6 +254,9 @@ void ModuleExit(void) {
     //step3: clean up rule_list
     RuleListCleanup();
     
+    //step4: free io_buff
+    kfree(g_io_buff);
+
     printk("Module unistall succeed!\n");
 } 
 
